@@ -1,96 +1,55 @@
-# redis-stat
+# redis-stat.net
 
-_redis-stat_ is a simple Redis monitoring tool written in Ruby.
+_redis-stat.net_ is a simple Redis monitoring tool written on .NET 4.5. It allows you to monitor Redis instances with a dashboard page that is served from an IIS instance.
 
-It is based on [INFO](http://redis.io/commands/info) command of Redis,
-and thus generally won't affect the performance of the Redis instance
-unlike the other monitoring tools based on [MONITOR](http://redis.io/commands/monitor) command.
+It has been ported from [redis-stat](https://github.com/junegunn/redis-stat) a nice Ruby application (with more features that this one), and it was created with the sole purpose of avoiding the instalation of ruby, java or jruby in your windows servers, allowing you to run it natively from Windows.
 
-_redis-stat_ allows you to monitor Redis instances
-- either with vmstat-like output from the terminal
-- or with the dashboard page served by its embedded web server.
+This utility is still a work in progress, I will continue updating it until it gets to a point that it works as close as the original application. If you find issues, file them in the issues section so that I can take a look at them.
+
+This version only contains the dashboard page, there is no console application loging.
+
+## Technologies used
+
+- .NET Framework 4.5
+- MVC 5
+- SignalR 2
+- StackExchange.Redis
 
 ## Installation
 
-```
-gem install redis-stat
-```
-
-If you have trouble setting up a Ruby environment, you can [download the
-executable JAR file](https://github.com/junegunn/redis-stat/releases) and use
-it instead.
+1. Clone it to your desktop.
+2. Publish the app to IIS using .NET 4.0 as the apppool's preferred framework.
+3. Enable WebSockets protocol in Roles and Features on your Windows Server (Support for SignalR)
+4. Modify settings as needed.
 
 ## Usage
 
-```
-usage: redis-stat [HOST[:PORT] ...] [INTERVAL [COUNT]]
-
-    -a, --auth=PASSWORD              Password
-    -v, --verbose                    Show more info
-        --style=STYLE                Output style: unicode|ascii
-        --no-color                   Suppress ANSI color codes
-        --csv=OUTPUT_CSV_FILE_PATH   Save the result in CSV format
-        --es=ELASTICSEARCH_URL       Send results to ElasticSearch: [http://]HOST[:PORT][/INDEX]
-
-        --server[=PORT]              Launch redis-stat web server (default port: 63790)
-        --daemon                     Daemonize redis-stat. Must be used with --server option.
-
-        --version                    Show version
-        --help                       Show this message
-```
-
-## Running redis-stat for command-line monitoring
+Modify web.config file manually or from IIS and set following properties.
 
 ```
-redis-stat
-redis-stat 1
-redis-stat 1 10
-redis-stat --verbose
-redis-stat localhost:6380 1 10
-redis-stat localhost localhost:6380 localhost:6381 5
-redis-stat localhost localhost:6380 1 10 --csv=/tmp/output.csv --verbose
+  <appSettings>
+    <add key="Verbose" value="false" />
+    <add key="RedisPassword" value="your redis password" />
+    <add key="Interval" value="2" />
+    <add key="Hosts" value="localhost:6379" />
+  </appSettings>
 ```
 
-### Screenshot
-
-![Terminal output](https://github.com/junegunn/redis-stat/raw/master/screenshots/redis-stat-0.3.0.png)
-
-## redis-stat in web browser
-
-When `--server` option is set, redis-stat will open up an embedded web server (default port: 63790)
-in the background so that you can monitor Redis in your browser.
-
-Since _redis-stat_ pushes updates every interval via [Server-sent events](http://www.w3.org/TR/eventsource/),
-modern browsers are required to view the page.
-
-```
-redis-stat --server
-redis-stat --verbose --server=8080 5
-
-# redis-stat server can be daemonized
-redis-stat --server --daemon
-
-# Kill the daemon
-killall -9 redis-stat-daemon
-```
+Or if you feel more adventurous, implement a new class from IOptions.cs and access those 4 values from wherever you want. (don't forget to register it on the IoC container for it to work)
 
 ### Screenshot
 
 ![Dashboard](https://github.com/junegunn/redis-stat/raw/master/screenshots/redis-stat-web.png)
 
-## Windows support
 
-If you're running Windows, you can only install redis-stat on
-[JRuby](http://jruby.org/). Notice that fancy terminal colors will not be
-printed as they are not supported in the default Windows command prompt.
+## Author of this tool
 
-## Author
-- [Junegunn Choi](https://github.com/junegunn)
+- [Alejandro Mora](https://github.com/amd989) 
 
-## Contributors
-- [Chris Meisl](https://github.com/cmeisl)
-- [Hyunseok Hwang](https://github.com/frhwang)
-- [Sent Hil](https://github.com/sent-hil)
+## Thanks To 
+
+Original Author of redis-stat. He has made an amazing job at creating that tool from scratch. Please check his version first to get more functionality than this version and showing him some support.
+- [Junegunn Choi](https://github.com/junegunn) 
 
 ## Contributing
 
@@ -100,11 +59,4 @@ printed as they are not supported in the default Windows command prompt.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## About the name _redis-stat_
-
-Since this project was supposed to be a vmstat-like monitoring script for Redis,
-naming it _redis-stat_ seemed like a nice idea. That was when I was unaware of the existence of
-the original [redis-stat](https://github.com/antirez/redis-tools/blob/master/redis-stat.c)
-included in [redis-tools](https://github.com/antirez/redis-tools) written by the creator of Redis himself. (My bad)
-Although the original C-version hasn't been updated for the past couple of years, you might want to check it out first.
 
