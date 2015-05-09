@@ -1,0 +1,147 @@
+﻿@using Newtonsoft.Json
+@using redis_stat.net.Models
+@model redis_stat.net.ViewModels.IndexViewModel
+@{
+    ViewBag.Title = "redis-stat.net";
+}
+
+@functions{
+    public string ToJson(object value)
+    {
+        return JsonConvert.SerializeObject(value);
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <h3>Dashboard</h3>
+            <div class="alert alert-error hide">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="chart1" class="span4 chart">
+        </div>
+        <div id="chart2" class="span4 chart">
+        </div>
+        <div id="chart3" class="span4 chart">
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <table id="stat_table" class="table table-striped table-bordered table-condensed @Model.VerboseClass">
+                <thead>
+                    <tr>
+                        @foreach (var measure in Model.Measures)
+                        {
+                            <th>
+                                <h5 class="text-info @Model.VerboseClass">
+                                    <a href="#" rel="tooltip" title="@measure">
+                                        @Constants.Labels[measure]
+                                    </a>
+                                </h5>
+                            </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody id="info">
+                    @for (int i = 0; i < Model.StatTableRows; i++)
+                    {
+                        <tr><td colspan="@Model.Measures.Count()">&nbsp;</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <h3>Instance information</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span12 info-wrapper">
+            <div class="span2">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stat in Model.TabMeasures)
+                        {
+                            <tr>
+                                <th>@stat</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="span10 scrollable">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            @foreach (var host in Model.Navigation.Hosts)
+                            {
+                                <th class="text-info @(!string.IsNullOrEmpty(Model.Navigation.Selected) && host.Text == Model.Navigation.Selected ? " selected" : string.Empty)">
+                                    <a href="@host.Value">@host.Text</a>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stat in Model.TabMeasures)
+                        {
+                            <tr id="@stat">
+                                @{ var info = Model.Info; }
+                                @foreach (var host in Model.Navigation.Hosts)
+                                {
+                                    <td>
+                                        @if (info.Any() && info.ContainsKey(host.Text))
+                                        {
+                                            var stats = info[host.Text];
+                                            if (stats.ContainsKey(stat))
+                                            {
+                                                var value = stats[stat];
+                                                @(value.Any() ? value[0] : "0")
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @("0")
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+      $(function() {
+        initialize({
+          selected: @Html.Raw(ToJson(Model.Navigation.Selected)),
+          measures: @Html.Raw(ToJson(Model.Measures)),
+          colors:   @Html.Raw(ToJson(Model.Colors)),
+          history:  @Html.Raw(ToJson(Model.History)),
+          max:      @Model.HistoryLength,
+          fade_dur: @(Model.Interval < 1 ? 0 : 300),
+          rows:     @Model.StatTableRows});
+
+          $("#stat_table th a").tooltip();
+          $("#hostlist").select2();
+          $("#hostlist").bind('change', function() {
+          window.location = $(this).val();
+          }); 
+      })
+</script>

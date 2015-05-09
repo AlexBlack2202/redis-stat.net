@@ -1,0 +1,36 @@
+﻿<script src="~/signalr/hubs"></script>
+<script>
+    var redisHub;
+
+    redisHub = $.connection.redisStatsHub;
+    
+    function GetAllStats() {
+        redisHub.server.getAllStats().done(function(stats) {
+            console.log(stats);
+        });
+    }
+
+    redisHub.client.broadcastMessage = function (stat) {
+        var alert = $(".alert");
+        if (stat.error && stat.error.length > 0) {
+            alert.html(
+              $.map(stat.error, function (e, _) {
+                  return "<h4>" + e + "</h4>";
+              }).join(''));
+            alert.fadeIn();
+        } else {
+            alert.fadeOut();
+        }
+        if (appendToHistory(stat)) {
+            updateTable();
+            updatePlot();
+        }
+    }
+
+    $(document).ready(function () {
+        $.connection.hub.start().done(function() {
+            console.log("I'm connected with id: " + $.connection.hub.id);
+        });
+    });
+    
+</script>
