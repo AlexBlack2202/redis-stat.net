@@ -36,7 +36,7 @@ namespace redis_stat.net
                     "~/Scripts/jqPlot/plugins/jqplot.canvasAxisLabelRenderer.min.js", 
                     "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/select2").Include("~/Scripts/select2.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/select2").Include("~/Scripts/select2.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -46,7 +46,7 @@ namespace redis_stat.net
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css", "~/Content/site.css"));
             
-            bundles.Add(new StyleBundle("~/Content/jqplot").Include("~/Scripts/jqPlot/jquery.jqplot.min.css"));
+            bundles.Add(new StyleBundle("~/Content/jqplot").Include("~/Scripts/jqPlot/jquery.jqplot.css"));
             
             bundles.Add(new StyleBundle("~/Content/select2").Include("~/Content/select2-bootstrap.css"));
         }

@@ -40,16 +40,10 @@ namespace redis_stat.net.Models
         }
 
         /// <summary>The info.</summary>
-        /// <param name="endpointName">The endpoint name.</param>
         /// <returns>The <see cref="IEnumerable{RedisServerDto}"/>.</returns>
-        public IEnumerable<RedisServer> Info(string endpointName = null)
+        public IEnumerable<RedisServer> Info()
         {
             var endpoints = this.client.GetEndPoints().Cast<DnsEndPoint>();
-            if (!string.IsNullOrEmpty(endpointName))
-            {
-                endpoints = endpoints.Where(a => a.Host == endpointName);
-            }
-
             var servers = (from endpoint in endpoints
                            let server = this.client.GetServer(endpoint)
                            select
@@ -57,18 +51,9 @@ namespace redis_stat.net.Models
                                    {
                                        Host = endpoint.Host,
                                        Port = endpoint.Port.ToString(CultureInfo.InvariantCulture),
-                                       Information =
-                                           server.Info()
-                                           .Select(
-                                               a =>
-                                               new RedisInformation
-                                                   {
-                                                       Section = a.Key,
-                                                       Values =
-                                                           a.ToDictionary(
-                                                               b => b.Key,
-                                                               c => c.Value)
-                                                   })
+                                       Information = server.Info().Select(a =>new RedisInformation{
+                                           Section = a.Key,
+                                           Values = a.ToDictionary(b => b.Key,c => c.Value)})
                                    }).ToList();
             return servers;
         }

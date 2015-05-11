@@ -17,9 +17,8 @@ namespace redis_stat.net.Models
         #region Public Methods and Operators
 
         /// <summary>The info.</summary>
-        /// <param name="endpointName">The endpoint name.</param>
         /// <returns>The <see cref="IEnumerable{RedisServerDto}"/>.</returns>
-        IEnumerable<RedisServer> Info(string endpointName = null);
+        IEnumerable<RedisServer> Info();
 
         #endregion
     }

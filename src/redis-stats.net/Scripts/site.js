@@ -155,7 +155,7 @@ var updateTable = function () {
     }
 
     // Time-series tabular data
-    var row = "<tr class='hide'>";
+    var row = "<tr style='display: table-row;'>";
     for (var i = 0; i < measures.length; ++i) {
         var m = measures[i];
         if (!jd[m].hasOwnProperty(selected)) return;

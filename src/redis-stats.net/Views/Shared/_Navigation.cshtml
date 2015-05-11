@@ -1,33 +1,48 @@
 ﻿@using Microsoft.Ajax.Utilities
 @model redis_stat.net.ViewModels.NavigationViewModel
 @functions {
+
+    /// <summary>The selected.</summary>
+    /// <param name="a">The a.</param>
+    /// <param name="b">The b.</param>
+    /// <returns>The <see cref="bool"/>.</returns>
     public static bool Selected(string a, string b)
     {
         return a == b;
     }
+
 }
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="brand" href="/">redis-stat.net</a>
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                redis-stat.net
+            </a>
             @{
                 var selected = Model.Selected;
                 var defaultSelected = selected.IsNullOrWhiteSpace();
             }
-            @if (Model.Hosts.Count() > 1)
-            {
-                <ul class="nav">
-                    <li>
-                        <select id="hostlist" class="select2 input-default">
+        </div>
+        @if (Model.Hosts.Count() > 0)
+        {
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <div class="input-group select2-bootstrap-append">
+                        <select id="hostlist" class="form-control select2">
                             <option value="/" selected="@defaultSelected">All instances</option>
                             @foreach (var host in Model.Hosts)
                             {
-                                <option value="@host.Value" selected="@Selected(selected, host.Text)" >@host.Text</option>
+                                <option value="@host.Value" selected="@Selected(selected, host.Text)">@host.Text</option>
                             }
                         </select>
-                    </li>
-                </ul>
-            }
-        </div>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" data-select2-open="hostlist">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        }
     </div>
-</div>
+</nav>
