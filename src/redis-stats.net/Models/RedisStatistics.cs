@@ -121,7 +121,7 @@ namespace redis_stat.net.Models
                 case "keyspace_hits_per_second":
                 case "keyspace_misses_per_second":
                 case "total_commands_processed_per_second":
-                    value = GetValueFromServer(info, host, key);
+                    value = Subtract(info, prevInfo, host, key.Replace("_per_second", string.Empty)).ToString(CultureInfo.InvariantCulture);
                     result = HumanizeNumber(value);
                     break;
                 case "used_memory":
