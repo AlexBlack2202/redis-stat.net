@@ -34,7 +34,7 @@ namespace redis_stat.net.Models
         private readonly IOptions redisStatsOptions;
 
         /// <summary>The stats.</summary>
-        private readonly Queue<Stats> stats = new Queue<Stats>(Constants.HistoryLength);
+        private readonly Queue<Stats> stats = new Queue<Stats>();
 
         /// <summary>The update interval.</summary>
         private readonly TimeSpan updateInterval;
