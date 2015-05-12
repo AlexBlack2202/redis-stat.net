@@ -27,8 +27,8 @@
         {
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <div class="input-group select2-bootstrap-append">
-                        <select id="hostlist" class="form-control select2">
+                    <div class="input-group select2-container">
+                        <select id="hostlist" class="form-control">
                             <option value="/" selected="@defaultSelected">All instances</option>
                             @foreach (var host in Model.Hosts)
                             {
