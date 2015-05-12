@@ -138,7 +138,6 @@ namespace redis_stat.net.Models
                     result = HumanizeNumber(value);
                     break;
                 case "keyspace_hit_ratio_per_second":
-
                     hits = Subtract(info, prevInfo, host, "keyspace_hits");
                     misses = Subtract(info, prevInfo, host, "keyspace_misses");
                     value = Ratio(hits, misses).ToString(CultureInfo.InvariantCulture);
@@ -264,14 +263,9 @@ namespace redis_stat.net.Models
         /// <returns>The <see cref="object[]"/>.</returns>
         private static object[] HumanizeNumber(string value, bool byteRepresentation = false)
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                return new object[] { "-", 0 };
-            }
-
             try
             {
-                var converted = Convert.ToInt64(value);
+                var converted = Convert.ToInt64(value, CultureInfo.CurrentCulture);
                 var result = converted.ToReadableSIUnit();
                 return new object[] { byteRepresentation ? result + "B" : result, converted };
             }
