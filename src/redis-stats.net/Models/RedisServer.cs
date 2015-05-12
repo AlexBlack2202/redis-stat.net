@@ -30,6 +30,10 @@ namespace redis_stat.net.Models
         [DataMember]
         public string Port { get; set; }
 
+        /// <summary>Gets or sets the error.</summary>
+        [DataMember]
+        public string Error { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

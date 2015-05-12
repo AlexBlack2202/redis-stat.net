@@ -206,7 +206,7 @@ namespace redis_stat.net.Models
         private static string GetValueFromServer(IEnumerable<RedisServer> serverInformation, string host, string key)
         {
             var result = (from server in serverInformation
-                          where server.ToString() == host
+                          where server.ToString() == host && server.Information != null
                           from information in server.Information
                           from value in information.Values
                           where value.Key == key
@@ -224,7 +224,7 @@ namespace redis_stat.net.Models
         {
             var regex = new Regex(pattern);
             var result = from server in serverInformation
-                         where server.ToString() == host
+                         where server.ToString() == host && server.Information != null
                          from information in server.Information
                          from value in information.Values
                          where regex.IsMatch(value.Key)

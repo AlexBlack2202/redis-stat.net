@@ -43,19 +43,32 @@ namespace redis_stat.net.Models
         /// <returns>The <see cref="IEnumerable{RedisServerDto}"/>.</returns>
         public IEnumerable<RedisServer> Info()
         {
+            var redisServers = new List<RedisServer>();
             var endpoints = this.client.GetEndPoints().Cast<DnsEndPoint>();
-            var servers = (from endpoint in endpoints
-                           let server = this.client.GetServer(endpoint)
-                           select
-                               new RedisServer
-                                   {
-                                       Host = endpoint.Host,
-                                       Port = endpoint.Port.ToString(CultureInfo.InvariantCulture),
-                                       Information = server.Info().Select(a =>new RedisInformation{
-                                           Section = a.Key,
-                                           Values = a.ToDictionary(b => b.Key,c => c.Value)})
-                                   }).ToList();
-            return servers;
+            foreach (var endpoint in endpoints)
+            {
+                var redisServer = new RedisServer { Host = endpoint.Host, Port = endpoint.Port.ToString(CultureInfo.InvariantCulture) };
+                var server = this.client.GetServer(endpoint);
+                try
+                {
+                    redisServer.Information = server.Info().Select(a => new RedisInformation { Section = a.Key, Values = a.ToDictionary(b => b.Key, c => c.Value) });
+                }
+                catch (RedisConnectionException ex)
+                {
+                    // Server dead.
+                    redisServer.Information = null;
+                    redisServer.Error = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Redis server {0}:{1} connection failed, with following error: {2}",
+                        endpoint.Host,
+                        endpoint.Port,
+                        ex.FailureType);
+                }
+
+                redisServers.Add(redisServer);
+            }
+
+            return redisServers;
         }
     }
 }
