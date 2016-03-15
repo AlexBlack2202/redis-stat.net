@@ -10,8 +10,10 @@
 
     using Microsoft.AspNet.SignalR;
 
-    using redis_stat.net.Hubs;
     using redis_stat.net.Models;
+
+    using redis_stats.net.common.Hubs;
+    using redis_stats.net.common.Models;
 
     public class MvcApplication : HttpApplication
     {
@@ -26,6 +28,7 @@
             var builder = new ContainerBuilder();
 
             builder.RegisterType<Options>().As<IOptions>();
+            builder.RegisterType<SignalROutput>().As<IOutput>();
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();
             builder.RegisterType<RedisStatistics>().As<IRedisStatistics>().As<IStartable>().SingleInstance();
             builder.RegisterType<RedisStatsHub>().ExternallyOwned();

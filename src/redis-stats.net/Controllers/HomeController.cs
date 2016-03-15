@@ -14,8 +14,9 @@ namespace redis_stat.net.Controllers
     using System.Net;
     using System.Web.Mvc;
 
-    using redis_stat.net.Models;
     using redis_stat.net.ViewModels;
+
+    using redis_stats.net.common.Models;
 
     using IndexViewModel = redis_stat.net.ViewModels.IndexViewModel;
 

@@ -13,7 +13,7 @@ namespace redis_stat.net.ViewModels
     using System.Linq;
     using System.Text;
 
-    using redis_stat.net.Models;
+    using redis_stats.net.common.Models;
 
     /// <summary>The index view model.</summary>
     public class IndexViewModel
@@ -23,6 +23,7 @@ namespace redis_stat.net.ViewModels
         /// <summary>The verbose.</summary>
         private readonly bool verbose;
 
+        /// <summary>The history length.</summary>
         private readonly int historyLength;
 
         #endregion
