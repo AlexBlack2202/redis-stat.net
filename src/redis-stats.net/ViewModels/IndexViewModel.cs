@@ -13,7 +13,7 @@ namespace redis_stat.net.ViewModels
     using System.Linq;
     using System.Text;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The index view model.</summary>
     public class IndexViewModel
@@ -88,7 +88,7 @@ namespace redis_stat.net.ViewModels
             {
                 var history = this.History.ToList();
                 return this.Navigation.Hosts.ToDictionary(
-                    host => host.Text,
+                    host => host.Item1,
                     host =>
                         {
                             var firstOrDefault = history.FirstOrDefault();

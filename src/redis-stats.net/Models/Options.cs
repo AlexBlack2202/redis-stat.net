@@ -12,7 +12,7 @@ namespace redis_stat.net.Models
     using System;
     using System.Configuration;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The options.</summary>
     public class Options : IOptions

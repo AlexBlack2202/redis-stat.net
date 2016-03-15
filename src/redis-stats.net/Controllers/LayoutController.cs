@@ -7,15 +7,16 @@
 // </summary>
 // <author>amd989</author>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace redis_stat.net.Controllers
 {
+    using System;
     using System.Linq;
     using System.Net;
     using System.Web.Mvc;
 
+    using redis_stat.net.common.Models;
     using redis_stat.net.ViewModels;
-
-    using redis_stats.net.common.Models;
 
     /// <summary>The layout controller.</summary>
     public class LayoutController : Controller
@@ -40,7 +41,7 @@ namespace redis_stat.net.Controllers
             var navigationViewModel = new NavigationViewModel
                                           {
                                               Hosts = from host in this.options.Hosts
-                                                      select new SelectListItem { Text = host, Value = "/?host=" + WebUtility.HtmlEncode(host) },
+                                                      select new Tuple<string, string>(host, "/?host=" + WebUtility.HtmlEncode(host)),
                                               Selected = selected
                                           };
             return this.PartialView("_Navigation", navigationViewModel);

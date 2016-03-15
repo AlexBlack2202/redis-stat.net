@@ -12,7 +12,7 @@ namespace redis_stat.net.console.Models
     using CommandLine;
     using CommandLine.Text;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The argument options.</summary>
     internal class ArgumentOptions : IOptions

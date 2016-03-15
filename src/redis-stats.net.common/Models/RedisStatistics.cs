@@ -7,7 +7,7 @@
 // </summary>
 // <author>amd989</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace redis_stats.net.common.Models
+namespace redis_stat.net.common.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +17,8 @@ namespace redis_stats.net.common.Models
     using System.Threading;
 
     using Autofac;
+
+    using redis_stat.net.common.Attributes;
 
     /// <summary>The Redis stats.</summary>
     public class RedisStatistics : IRedisStatistics, IStartable
@@ -54,7 +56,8 @@ namespace redis_stats.net.common.Models
         /// <summary>Initializes a new instance of the <see cref="RedisStatistics"/> class.</summary>
         /// <param name="client">The client.</param>
         /// <param name="redisStatsOptions">The options.</param>
-        public RedisStatistics(IRedisClient client, IOptions redisStatsOptions, IOutput output)
+        /// <param name="output">The output.</param>
+        public RedisStatistics(IRedisClient client, IOptions redisStatsOptions, [WithOptions]IOutput output)
         {
             this.updateInterval = TimeSpan.FromSeconds(redisStatsOptions.Interval);
             this.client = client;
@@ -89,8 +92,8 @@ namespace redis_stats.net.common.Models
         /// </summary>
         public void Start()
         {
-            ////this.timer = new Timer(this.GetStatistic, null, this.updateInterval, this.updateInterval);
-            this.GetStatistic(this);
+            this.timer = new Timer(this.GetStatistic, null, this.updateInterval, this.updateInterval);
+            ////this.GetStatistic(this);
         }
         
         /// <summary>The stop timer.</summary>

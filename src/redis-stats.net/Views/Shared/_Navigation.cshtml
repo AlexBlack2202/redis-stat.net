@@ -32,7 +32,7 @@
                             <option value="/" selected="@defaultSelected">All instances</option>
                             @foreach (var host in Model.Hosts)
                             {
-                                <option value="@host.Value" selected="@Selected(selected, host.Text)">@host.Text</option>
+                                <option value="@host.Item2" selected="@Selected(selected, host.Item1)">@host.Item1</option>
                             }
                         </select>
                         <span class="input-group-btn">

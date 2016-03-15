@@ -24,6 +24,8 @@ namespace redis_stat.net.console
     using Microsoft.AspNet.SignalR;
     using Microsoft.Owin.Diagnostics;
 
+    using Nancy.Owin;
+
     using Owin;
 
     /// <summary>The startup.</summary>
@@ -75,7 +77,9 @@ namespace redis_stat.net.console
                         ShowSourceCode = true,
                         SourceCodeLineCount = 5
                     });
-            app.UseNancy();
+
+            var options = new NancyOptions() { Bootstrapper = new Bootstrapper(this.container) };
+            app.UseNancy(options);
         }
 
         #endregion

@@ -12,13 +12,14 @@ namespace redis_stat.net.console
     using System.Reflection;
 
     using Autofac;
+    using Autofac.Extras.AttributeMetadata;
     using Autofac.Integration.Mvc;
     using Autofac.Integration.SignalR;
 
+    using redis_stat.net.common.Hubs;
+    using redis_stat.net.common.Models;
     using redis_stat.net.console.Models;
-
-    using redis_stats.net.common.Hubs;
-    using redis_stats.net.common.Models;
+    using redis_stat.net.Models;
 
     using Module = Autofac.Module;
 
@@ -51,9 +52,13 @@ namespace redis_stat.net.console
 
             builder.RegisterHubs(assembly);
             builder.RegisterType<ArgumentOptions>().As<IOptions>().SingleInstance();
-            builder.RegisterType<ConsoleOutput>().As<IOutput>().SingleInstance();
+
+            builder.RegisterType<FileOutput>().As<IOutput>().Keyed<IOutput>("csv").SingleInstance();
+            builder.RegisterType<SignalROutput>().As<IOutput>().Keyed<IOutput>("daemon").SingleInstance();
+            builder.RegisterType<ConsoleOutput>().As<IOutput>().Keyed<IOutput>("console").SingleInstance();
+
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();
-            builder.RegisterType<RedisStatistics>().As<IRedisStatistics>().SingleInstance();
+            builder.RegisterType<RedisStatistics>().As<IRedisStatistics>().WithAttributeFilter().SingleInstance();
             builder.RegisterType<RedisStatsHub>().ExternallyOwned();
 
             base.Load(builder);

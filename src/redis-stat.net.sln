@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E55CC6
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "redis-stats.net.common", "redis-stats.net.common\redis-stats.net.common.csproj", "{E89A91DB-DFC7-46FB-8147-8CA816919E42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "redis-stat.net.common", "redis-stats.net.common\redis-stat.net.common.csproj", "{E89A91DB-DFC7-46FB-8147-8CA816919E42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "redis-stat.net.console", "redis-stat.net.console\redis-stat.net.console.csproj", "{7D2AD425-619C-4ED1-A165-B16573A825C0}"
 EndProject

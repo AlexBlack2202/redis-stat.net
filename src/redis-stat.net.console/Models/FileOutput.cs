@@ -11,7 +11,7 @@ namespace redis_stat.net.console.Models
 {
     using System.Linq;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The file output.</summary>
     internal class FileOutput : IOutput

@@ -16,7 +16,7 @@ namespace redis_stat.net.console
 
     using Microsoft.Owin.Hosting;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The program.</summary>
     internal class Program

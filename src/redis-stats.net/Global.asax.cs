@@ -10,10 +10,9 @@
 
     using Microsoft.AspNet.SignalR;
 
+    using redis_stat.net.common.Hubs;
+    using redis_stat.net.common.Models;
     using redis_stat.net.Models;
-
-    using redis_stats.net.common.Hubs;
-    using redis_stats.net.common.Models;
 
     public class MvcApplication : HttpApplication
     {

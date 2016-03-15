@@ -1,8 +1,10 @@
-﻿@using Newtonsoft.Json
-@using redis_stats.net.common.Models
+﻿@using System.Linq
+@using Newtonsoft.Json
+@using redis_stat.net.common.Models
 @model redis_stat.net.ViewModels.IndexViewModel
 @{
     ViewBag.Title = "redis-stat.net";
+    Layout = "Views/Shared/_Layout.cshtml";
 }
 
 @functions{
@@ -88,8 +90,8 @@
                         <tr>
                             @foreach (var host in Model.Navigation.Hosts)
                             {
-                                <th class="text-info @(!string.IsNullOrEmpty(Model.Navigation.Selected) && host.Text == Model.Navigation.Selected ? " selected" : string.Empty)">
-                                    <a href="@host.Value">@host.Text</a>
+                                <th class="text-info @(!string.IsNullOrEmpty(Model.Navigation.Selected) && host.Item1 == Model.Navigation.Selected ? " selected" : string.Empty)">
+                                    <a href="@host.Item2">@host.Item1</a>
                                 </th>
                             }
                         </tr>
@@ -102,9 +104,9 @@
                                 @foreach (var host in Model.Navigation.Hosts)
                                 {
                                     <td>
-                                        @if (info.Any() && info.ContainsKey(host.Text))
+                                        @if (info.Any() && info.ContainsKey(host.Item1))
                                         {
-                                            var stats = info[host.Text];
+                                            var stats = info[host.Item1];
                                             if (stats.ContainsKey(stat))
                                             {
                                                 var value = stats[stat];

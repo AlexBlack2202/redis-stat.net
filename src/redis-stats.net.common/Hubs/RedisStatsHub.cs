@@ -7,14 +7,14 @@
 // </summary>
 // <author>amd989</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace redis_stats.net.common.Hubs
+namespace redis_stat.net.common.Hubs
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNet.SignalR;
 
-    using redis_stats.net.common.Models;
+    using redis_stat.net.common.Models;
 
     /// <summary>The redis stats hub.</summary>
     public class RedisStatsHub : Hub

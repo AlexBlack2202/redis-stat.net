@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRedisStats.cs" company="">
+// <copyright file="IRedisStatistics.cs" company="">
 //   
 // </copyright>
 //  <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // <author>amd989</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace redis_stats.net.common.Models
+namespace redis_stat.net.common.Models
 {
     using System.Collections.Generic;
 

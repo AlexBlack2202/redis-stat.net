@@ -1,4 +1,4 @@
-﻿namespace redis_stats.net.common.Models
+﻿namespace redis_stat.net.common.Models
 {
     using System.Collections.Generic;
 

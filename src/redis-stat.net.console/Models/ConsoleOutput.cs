@@ -15,11 +15,8 @@ namespace redis_stat.net.console.Models
     using System.Linq;
     using System.Text;
 
+    using redis_stat.net.common.Models;
     using redis_stat.net.console.Utilities;
-
-    using redis_stats.net.common.Models;
-
-    using WebGrease.Css.Extensions;
 
     /// <summary>The console output.</summary>
     internal class ConsoleOutput : IOutput
@@ -41,7 +38,6 @@ namespace redis_stat.net.console.Models
         public void Write(Stats stats)
         {
             this.OutputDynamicInfo(stats);
-            ////this.OutputStaticInfo(stats);
         }
 
         /// <summary>The move.</summary>
@@ -72,11 +68,6 @@ namespace redis_stat.net.console.Models
                 var result = enumerable.Select(exception => string.Format("[{0}@{1}] {2}", now, 0, exception)).ToList();
                 return result;
             }
-        }
-
-        private void OutputFile(Stats stats, StreamWriter file)
-        {
-
         }
 
         private bool OutputTermErrors(IEnumerable<string> errorMessages)
@@ -138,8 +129,6 @@ namespace redis_stat.net.console.Models
             
             Console.WriteLine(sb.ToString());
         }
-
-
 
         #endregion
     }
