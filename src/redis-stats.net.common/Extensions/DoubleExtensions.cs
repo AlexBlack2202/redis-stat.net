@@ -7,7 +7,7 @@
 // </summary>
 // <author>amd989</author>
 // --------------------------------------------------------------------------------------------------------------------
-namespace redis_stat.net.common.Models
+namespace redis_stat.net.common.Extensions
 {
     using System;
     using System.Globalization;

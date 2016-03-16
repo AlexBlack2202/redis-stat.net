@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace redis_stat.net.console.Models
+namespace redis_stat.net.common.IO
 {
     using System;
     using System.IO;
     using System.Linq;
 
     /// <summary>The file manager.</summary>
-    public class FileManager
+    public class FileManager : IFileManager
     {
         #region Public Methods and Operators
 
@@ -89,7 +89,7 @@ namespace redis_stat.net.console.Models
         public void WriteFile(string path, string contents)
         {
             // create a writer and open the file
-            TextWriter streamWriter = new StreamWriter(path);
+            TextWriter streamWriter = new StreamWriter(path, true);
 
             // write a line of text to the file
             streamWriter.WriteLine(contents);

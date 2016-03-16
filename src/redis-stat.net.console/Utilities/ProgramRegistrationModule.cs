@@ -17,6 +17,7 @@ namespace redis_stat.net.console.Utilities
     using Autofac.Integration.SignalR;
 
     using redis_stat.net.common.Hubs;
+    using redis_stat.net.common.IO;
     using redis_stat.net.common.Models;
     using redis_stat.net.console.Models;
     using redis_stat.net.Models;
@@ -42,7 +43,7 @@ namespace redis_stat.net.console.Utilities
             ////builder.RegisterModelBinderProvider();
 
             // OPTIONAL: Register web abstractions like HttpContextBase.
-            builder.RegisterModule<AutofacWebTypesModule>();
+            ////builder.RegisterModule<AutofacWebTypesModule>();
 
             // OPTIONAL: Enable property injection in view pages.
             ////builder.RegisterSource(new ViewRegistrationSource());
@@ -53,8 +54,10 @@ namespace redis_stat.net.console.Utilities
             builder.RegisterHubs(assembly);
             builder.RegisterType<ArgumentOptions>().As<IOptions>().SingleInstance();
 
+            builder.RegisterType<FileManager>().As<IFileManager>();
+
             builder.RegisterType<FileOutput>().Keyed<IOutput>("csv").SingleInstance();
-            builder.RegisterType<SignalROutput>().Keyed<IOutput>("daemon");
+            builder.RegisterType<SignalROutput>().Keyed<IOutput>("daemon").SingleInstance();
             builder.RegisterType<ConsoleOutput>().Keyed<IOutput>("console").SingleInstance();
 
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();

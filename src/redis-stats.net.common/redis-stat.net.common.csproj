@@ -80,9 +80,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\WithOptionsAttribute.cs" />
+    <Compile Include="IO\FileManager.cs" />
     <Compile Include="Hubs\RedisStatsHub.cs" />
+    <Compile Include="IO\IFileManager.cs" />
     <Compile Include="Models\Constants.cs" />
-    <Compile Include="Models\DoubleExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Models\IOptions.cs" />
     <Compile Include="Models\IOutput.cs" />
     <Compile Include="Models\IRedisClient.cs" />

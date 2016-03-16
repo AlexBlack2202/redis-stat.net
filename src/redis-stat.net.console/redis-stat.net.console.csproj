@@ -232,7 +232,6 @@
     </Compile>
     <Compile Include="Models\ArgumentOptions.cs" />
     <Compile Include="Models\ConsoleOutput.cs" />
-    <Compile Include="Models\FileManager.cs" />
     <Compile Include="Models\FileOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utilities\ProgramRegistrationModule.cs" />

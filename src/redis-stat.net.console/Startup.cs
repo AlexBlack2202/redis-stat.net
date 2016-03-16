@@ -13,7 +13,6 @@ using Microsoft.Owin;
 
 namespace redis_stat.net.console
 {
-    using System;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
@@ -21,9 +20,7 @@ namespace redis_stat.net.console
     using Autofac;
     using Autofac.Integration.Mvc;
 
-    using Microsoft.AspNet.SignalR;
     using Microsoft.Owin.Cors;
-    using Microsoft.Owin.Diagnostics;
 
     using Nancy.Owin;
 

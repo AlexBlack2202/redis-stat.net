@@ -47,7 +47,11 @@ namespace redis_stat.net.console
                 }
                 else
                 {
-                    container.Resolve<IRedisStatistics>();
+                    container.Resolve<IRedisStatistics>(); // Resolve to start
+                    if (string.IsNullOrEmpty(options.Csv))
+                    {
+                        Console.WriteLine("Logging to file: {0}", options.Csv);
+                    }
                     Console.ReadLine();
                 }
             }

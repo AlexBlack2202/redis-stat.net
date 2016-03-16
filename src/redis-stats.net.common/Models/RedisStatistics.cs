@@ -19,6 +19,7 @@ namespace redis_stat.net.common.Models
     using Autofac;
 
     using redis_stat.net.common.Attributes;
+    using redis_stat.net.common.Extensions;
 
     /// <summary>The Redis stats.</summary>
     public class RedisStatistics : IRedisStatistics, IStartable
