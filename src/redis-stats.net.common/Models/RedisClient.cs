@@ -44,7 +44,7 @@ namespace redis_stat.net.common.Models
         public IEnumerable<RedisServer> Info()
         {
             var redisServers = new List<RedisServer>();
-            var endpoints = this.client.GetEndPoints().Cast<DnsEndPoint>();
+            var endpoints = this.client.GetEndPoints(true).Cast<DnsEndPoint>();
             foreach (var endpoint in endpoints)
             {
                 var redisServer = new RedisServer { Host = endpoint.Host, Port = endpoint.Port.ToString(CultureInfo.InvariantCulture) };

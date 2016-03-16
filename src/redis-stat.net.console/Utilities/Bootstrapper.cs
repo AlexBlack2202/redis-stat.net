@@ -6,7 +6,7 @@
 //   The bootstrapper.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace redis_stat.net.console
+namespace redis_stat.net.console.Utilities
 {
     using System.Web.Optimization;
 

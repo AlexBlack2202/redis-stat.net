@@ -28,6 +28,7 @@
     }
 
     $(document).ready(function () {
+        $.connection.hub.logging = true;
         $.connection.hub.start().done(function() {
             console.log("I'm connected with id: " + $.connection.hub.id);
         });

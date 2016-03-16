@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace redis_stat.net.console
+namespace redis_stat.net.console.Utilities
 {
     using System.Collections.Generic;
 
@@ -24,6 +24,7 @@ namespace redis_stat.net.console
             yield return "redis-stat.net.common";
             yield return "System.Web.Optimization";
             yield return "System.Web";
+            yield return "System.Web.Mvc";
             yield return "Nancy.ViewEngines.Razor";
         }
 
@@ -35,6 +36,7 @@ namespace redis_stat.net.console
             yield return "redis_stat.net.common";
             yield return "redis_stat.net.common.Models";
             yield return "System.Web";
+            yield return "System.Web.Mvc";
             yield return "Nancy.ViewEngines.Razor";
         }
 

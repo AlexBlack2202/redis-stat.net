@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace redis_stat.net.console
+namespace redis_stat.net.console.Utilities
 {
     using System.Reflection;
 
@@ -42,7 +42,7 @@ namespace redis_stat.net.console
             ////builder.RegisterModelBinderProvider();
 
             // OPTIONAL: Register web abstractions like HttpContextBase.
-            ////builder.RegisterModule<AutofacWebTypesModule>();
+            builder.RegisterModule<AutofacWebTypesModule>();
 
             // OPTIONAL: Enable property injection in view pages.
             ////builder.RegisterSource(new ViewRegistrationSource());
@@ -53,9 +53,9 @@ namespace redis_stat.net.console
             builder.RegisterHubs(assembly);
             builder.RegisterType<ArgumentOptions>().As<IOptions>().SingleInstance();
 
-            builder.RegisterType<FileOutput>().As<IOutput>().Keyed<IOutput>("csv").SingleInstance();
-            builder.RegisterType<SignalROutput>().As<IOutput>().Keyed<IOutput>("daemon").SingleInstance();
-            builder.RegisterType<ConsoleOutput>().As<IOutput>().Keyed<IOutput>("console").SingleInstance();
+            builder.RegisterType<FileOutput>().Keyed<IOutput>("csv").SingleInstance();
+            builder.RegisterType<SignalROutput>().Keyed<IOutput>("daemon");
+            builder.RegisterType<ConsoleOutput>().Keyed<IOutput>("console").SingleInstance();
 
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();
             builder.RegisterType<RedisStatistics>().As<IRedisStatistics>().WithAttributeFilter().SingleInstance();

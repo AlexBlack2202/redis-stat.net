@@ -41,17 +41,13 @@ namespace redis_stat.net.console.Modules
             this.options = options;
             this.redisStatistics = redisStatistics;
 
-            ////this.Get["/"] = parameters => "Hello World";
-
             this.Get["/"] = parameters =>
                 {
 
                     var selected = this.Request.Form["host"];
                     var navigationViewModel = new NavigationViewModel
                                                   {
-                                                      Hosts =
-                                                          from host in this.options.Hosts
-                                                          select new Tuple<string, string>(host, "/?host=" + WebUtility.HtmlEncode(host)),
+                                                      Hosts = from host in this.options.Hosts select new Tuple<string, string>(host, "/?host=" + WebUtility.HtmlEncode(host)),
                                                       Selected = selected
                                                   };
 
@@ -65,20 +61,6 @@ namespace redis_stat.net.console.Modules
                                         };
 
                     return this.View["Index.cshtml", viewModel];
-                };
-
-            this.Get["/Layout/Navigation"] = parameters =>
-                {
-                    var selected = this.Request.Form.Get("host");
-                    var navigationViewModel = new NavigationViewModel
-                                                  {
-                                                      Hosts =
-                                                          from host in this.options.Hosts
-                                                          select new Tuple<string, string>(host, "/?host=" + WebUtility.HtmlEncode(host)),
-                                                      Selected = selected
-                                                  };
-
-                    return View["_Navigation.cshtml", navigationViewModel];
                 };
         }
 

@@ -1,5 +1,4 @@
-﻿@using Microsoft.Ajax.Utilities
-@model redis_stat.net.ViewModels.NavigationViewModel
+﻿@model redis_stat.net.ViewModels.NavigationViewModel
 @functions {
 
     /// <summary>The selected.</summary>
@@ -20,7 +19,7 @@
             </a>
             @{
                 var selected = Model.Selected;
-                var defaultSelected = selected.IsNullOrWhiteSpace();
+                var defaultSelected = string.IsNullOrEmpty(selected);
             }
         </div>
         @if (Model.Hosts.Count() > 1)

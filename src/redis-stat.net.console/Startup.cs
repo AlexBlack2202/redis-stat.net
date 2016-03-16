@@ -22,11 +22,14 @@ namespace redis_stat.net.console
     using Autofac.Integration.Mvc;
 
     using Microsoft.AspNet.SignalR;
+    using Microsoft.Owin.Cors;
     using Microsoft.Owin.Diagnostics;
 
     using Nancy.Owin;
 
     using Owin;
+
+    using redis_stat.net.console.Utilities;
 
     /// <summary>The startup.</summary>
     public class Startup
@@ -60,25 +63,11 @@ namespace redis_stat.net.console
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DependencyResolver.SetResolver(new AutofacDependencyResolver(this.container));
 
-            ////// Get your HubConfiguration. In OWIN, you'll create one rather than using GlobalHost.
-            var config = new HubConfiguration { Resolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(this.container) };
-
             app.UseAutofacMiddleware(this.container);
-            ////app.UseAutofacMvc();
-            app.MapSignalR("/signalr", config);
-            app.UseErrorPage(
-                new ErrorPageOptions
-                    {
-                        ShowCookies = true,
-                        ShowEnvironment = true,
-                        ShowExceptionDetails = true,
-                        ShowHeaders = true,
-                        ShowQuery = true,
-                        ShowSourceCode = true,
-                        SourceCodeLineCount = 5
-                    });
+            app.UseCors(CorsOptions.AllowAll);
+            app.MapSignalR();
 
-            var options = new NancyOptions() { Bootstrapper = new Bootstrapper(this.container) };
+            var options = new NancyOptions { Bootstrapper = new Bootstrapper(this.container) };
             app.UseNancy(options);
         }
 

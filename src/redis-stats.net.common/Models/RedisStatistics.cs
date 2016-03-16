@@ -93,7 +93,6 @@ namespace redis_stat.net.common.Models
         public void Start()
         {
             this.timer = new Timer(this.GetStatistic, null, this.updateInterval, this.updateInterval);
-            ////this.GetStatistic(this);
         }
         
         /// <summary>The stop timer.</summary>

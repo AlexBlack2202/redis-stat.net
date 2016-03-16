@@ -62,8 +62,8 @@ namespace redis_stat.net.common.Models
         public static readonly Dictionary<string, string> Format = new Dictionary<string, string> 
                                                                                         {
                                                                                             { "at", "{0,8}" },
-                                                                                            { "used_cpu_user", "{0,2}" },
-                                                                                            { "used_cpu_sys", "{0,2}" },
+                                                                                            { "used_cpu_user", "{0,3}" },
+                                                                                            { "used_cpu_sys", "{0,3}" },
                                                                                             { "connected_clients", "{0,5}" },
                                                                                             { "blocked_clients", "{0,3}" },
                                                                                             { "used_memory", "{0,5}" },
@@ -90,7 +90,7 @@ namespace redis_stat.net.common.Models
                                                                                         };
 
         /// <summary>The colors.</summary>
-        public static readonly  Dictionary<string, string[]> Colors = new Dictionary<string, string[]> 
+        public static readonly Dictionary<string, string[]> Colors = new Dictionary<string, string[]> 
                                                                                         {
                                                                                             { "at", new[] { "bold" } },
                                                                                             { "used_cpu_user", new[] { "yellow", "bold" } },

@@ -24,7 +24,7 @@ namespace redis_stat.net.common.Models
         ///     rinta, quexa, pepta, ocha, nena, minga, or luma
         ///     Just so you know...
         /// </summary>
-        private static readonly string[] sizes = { " ", "K", "M", "G", "T", "P", "E" };
+        private static readonly string[] sizes = { string.Empty, "K", "M", "G", "T", "P", "E" };
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace redis_stat.net.common.Models
             }
 
             var divisor = Math.Pow(10, group * 3);
-            return string.Format("{0:0.0} {1}", value / divisor, sizes[group]);
+            return string.Format("{0:0}{1}", value / divisor, sizes[group]);
         }
 
         #endregion

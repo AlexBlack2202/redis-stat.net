@@ -17,6 +17,7 @@ namespace redis_stat.net.console
     using Microsoft.Owin.Hosting;
 
     using redis_stat.net.common.Models;
+    using redis_stat.net.console.Utilities;
 
     /// <summary>The program.</summary>
     internal class Program
@@ -49,7 +50,6 @@ namespace redis_stat.net.console
                     container.Resolve<IRedisStatistics>();
                     Console.ReadLine();
                 }
-                
             }
         }
 

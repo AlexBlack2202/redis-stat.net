@@ -1,18 +1,64 @@
-﻿@using System.Linq
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<redis_stat.net.ViewModels.IndexViewModel>
+@using System.Linq
 @using Newtonsoft.Json
 @using redis_stat.net.common.Models
-@model redis_stat.net.ViewModels.IndexViewModel
+
 @{
     ViewBag.Title = "redis-stat.net";
+    Layout = "Views/Shared/_Layout.cshtml";
 }
 
 @functions{
+
     public string ToJson(object value)
     {
         return JsonConvert.SerializeObject(value);
     }
+
+    /// <summary>The selected.</summary>
+    /// <param name="a">The a.</param>
+    /// <param name="b">The b.</param>
+    /// <returns>The <see cref="bool"/>.</returns>
+    public static bool Selected(string a, string b)
+    {
+        return a == b;
+    }
 }
 
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                redis-stat.net
+            </a>
+            @{
+                var selected = Model.Navigation.Selected;
+                var defaultSelected = string.IsNullOrEmpty(selected);
+            }
+        </div>
+        @if (Model.Navigation.Hosts.Count() > 1)
+        {
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <div class="input-group select2-container">
+                        <select id="hostlist" class="form-control">
+                            <option value="/" selected="@defaultSelected">All instances</option>
+                            @foreach (var host in Model.Navigation.Hosts)
+                            {
+                                <option value="@host.Item2" selected="@Selected(selected, host.Item1)">@host.Item1</option>
+                            }
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" data-select2-open="hostlist">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</nav>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -147,7 +193,6 @@
           rows:     @Model.StatTableRows});
 
           $("#stat_table th a").tooltip();
-          ////$("#hostlist").select2();
           $("#hostlist").bind('change', function() {
           window.location = $(this).val();
           }); 

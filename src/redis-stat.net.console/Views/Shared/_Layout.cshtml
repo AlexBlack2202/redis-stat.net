@@ -1,0 +1,39 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link href="~/content/bootstrap.css" rel="stylesheet" />
+    <link href="~/scripts/jqPlot/jquery.jqplot.css" rel="stylesheet" />
+    <link href="~/Content/select2-bootstrap.css" rel="stylesheet" />
+    <link href="~/content/bootstrap.css" rel="stylesheet" />
+    <link href="~/content/site.css" rel="stylesheet" />
+
+    <script src="~/scripts/jquery-2.2.1.min.js"></script>
+    <script src="~/scripts/modernizr-2.8.3.js"></script>
+</head>
+<body>
+    @RenderBody()
+    <footer class="footer">
+        <div class="container">
+            <p>Powered by <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>, <a href="http://jquery.com/">jQuery</a> and <a href="http://www.jqplot.com/">jqPlot</a>.</p>
+        </div>
+    </footer>
+    
+    <script src="~/scripts/site.js"></script>
+    <script src="~/scripts/jquery.signalr-2.2.0.min.js"></script>
+    @Html.Partial("Views/Shared/_SignalR.cshtml")
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <script src="~/scripts/respond.min.js"></script>
+    <script src="~/scripts/jqplot/jquery.jqplot.min.js"></script>
+    <script src="~/scripts/jqplot/plugins/jqplot.canvastextrenderer.min.js"></script>
+    <script src="~/scripts/jqplot/plugins/jqplot.canvasaxislabelrenderer.min.js"></script>
+    <script src="~/scripts/jqplot/plugins/jqplot.canvasaxistickrenderer.min.js"></script>
+    <script src="~/scripts/select2.min.js"></script>
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>
