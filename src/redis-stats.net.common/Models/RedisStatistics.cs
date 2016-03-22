@@ -45,7 +45,7 @@ namespace redis_stat.net.common.Models
         private bool disposed;
 
         /// <summary>The previous server information.</summary>
-        private IEnumerable<RedisServer> previousServerInformation;
+        private IEnumerable<RedisServer> previousServerInfo;
 
         /// <summary>The timer.</summary>
         private Timer timer;
@@ -148,24 +148,6 @@ namespace redis_stat.net.common.Models
             return result;
         }
 
-        /// <summary>The humanize number.</summary>
-        /// <param name="value">The value.</param>
-        /// <param name="byteRepresentation">The byte representation.</param>
-        /// <returns>The <see cref="object[]"/>.</returns>
-        private static object[] HumanizeNumber(string value, bool byteRepresentation = false)
-        {
-            try
-            {
-                var converted = Convert.ToDouble(value, CultureInfo.CurrentCulture);
-                var result = converted.ToReadableSIUnit();
-                return new object[] { byteRepresentation ? result + "B" : result, converted };
-            }
-            catch (Exception)
-            {
-                return new object[] { "-", 0 };
-            }
-        }
-
         /// <summary>The ratio.</summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
@@ -217,95 +199,6 @@ namespace redis_stat.net.common.Models
             return x - y;
         }
 
-        /// <summary>The get dynamic properties.</summary>
-        /// <param name="serverInformation">The server information.</param>
-        /// <param name="previousInformation">The previous server information.</param>
-        /// <returns>The <see cref="T:Dictionary{String, Dictionary{String, object[]}}"/>.</returns>
-        private Dictionary<string, Dictionary<string, object[]>> GetDynamicProperties(IEnumerable<RedisServer> serverInformation, IEnumerable<RedisServer> previousInformation)
-        {
-            var dynamicFeatures = Constants.Measures[this.redisStatsOptions.Verbose ? "verbose" : "default"];
-            var t = new Dictionary<string, Dictionary<string, object[]>>();
-            foreach (var key in dynamicFeatures)
-            {
-                var c = this.redisStatsOptions.Hosts.ToDictionary(host => host, host => GetFormattedValues(key, host, serverInformation, previousInformation));
-                c.Add("sum", key == "at" ? c.FirstOrDefault().Value : HumanizeNumber(c.Sum(a => Convert.ToInt64(a.Value[1])).ToString(CultureInfo.InvariantCulture)));
-                t.Add(key, c);
-            }
-
-            return t;
-        }
-
-        /// <summary>The get value from server.</summary>
-        /// <param name="key">The key.</param>
-        /// <param name="host">The host.</param>
-        /// <param name="serverInformation">The server information.</param>
-        /// <param name="previousServerInformation">The previous server information.</param>
-        /// <param name="host">The host.</param>
-        /// <param name="serverInformation">The server information.</param>
-        /// <returns>The <see cref="object[]"/>.</returns>
-        private static object[] GetFormattedValues(string key, string host, IEnumerable<RedisServer> serverInformation, IEnumerable<RedisServer> previousServerInformation)
-        {
-            object[] result;
-            string value;
-            double hits, misses;
-
-            var info = serverInformation as IList<RedisServer> ?? serverInformation.ToList();
-            var prevInfo = previousServerInformation != null ? previousServerInformation as IList<RedisServer> ?? previousServerInformation.ToList() : null;
-
-            switch (key)
-            {
-                case "at":
-                    var datetime = DateTime.Now;
-                    var time = datetime.ToString("HH:mm:ss", CultureInfo.CurrentCulture);
-                    var dateTime = datetime.ToString("yyyy-MM-dd HH:mm:ss zzzz", CultureInfo.CurrentCulture);
-                    object[] formated = { time, dateTime };
-                    result = formated;
-                    break;
-                case "used_cpu_user":
-                case "used_cpu_sys":
-                    value = Convert.ToInt64(Math.Round(Subtract(info, prevInfo, host, key) * 100)).ToString(CultureInfo.CurrentCulture);
-                    result = HumanizeNumber(value);
-                    break;
-                case "keys":
-                    var matches = SearchValueFromServer(info, host, "^db[0-9]+$");
-                    value = matches.Sum(a => Convert.ToInt64(a.Split(",".ToCharArray())[0].Split("=".ToCharArray())[1], CultureInfo.InvariantCulture)).ToString(CultureInfo.InvariantCulture);
-                    result = HumanizeNumber(value);
-                    break;
-                case "evicted_keys_per_second":
-                case "expired_keys_per_second":
-                case "keyspace_hits_per_second":
-                case "keyspace_misses_per_second":
-                case "total_commands_processed_per_second":
-                    value = Subtract(info, prevInfo, host, key.Replace("_per_second", string.Empty)).ToString(CultureInfo.InvariantCulture);
-                    result = HumanizeNumber(value);
-                    break;
-                case "used_memory":
-                case "used_memory_rss":
-                case "aof_current_size":
-                case "aof_base_size":
-                    value = GetValueFromServer(info, host, key);
-                    result = HumanizeNumber(value, true);
-                    break;
-                case "keyspace_hit_ratio":
-                    hits = Convert.ToInt64(GetValueFromServer(info, host, "keyspace_hits"), CultureInfo.InvariantCulture);
-                    misses = Convert.ToInt64(GetValueFromServer(info, host, "keyspace_misses"), CultureInfo.InvariantCulture);
-                    value = Ratio(hits, misses).ToString(CultureInfo.CurrentCulture);
-                    result = HumanizeNumber(value);
-                    break;
-                case "keyspace_hit_ratio_per_second":
-                    hits = Subtract(info, prevInfo, host, "keyspace_hits");
-                    misses = Subtract(info, prevInfo, host, "keyspace_misses");
-                    result = HumanizeNumber(Ratio(hits, misses).ToString(CultureInfo.InvariantCulture));
-                    break;
-                default:
-                    value = GetValueFromServer(info, host, key);
-                    result = Constants.Types[key] == typeof(string) ? new object[] { value, value } : HumanizeNumber(value);
-                    break;
-            }
-
-            return result;
-        }
-
         /// <summary>The get static properties.</summary>
         /// <param name="serverInformation">The server information.</param>
         /// <returns>The <see cref="Dictionary{String, String[]}"/>.</returns>
@@ -313,23 +206,6 @@ namespace redis_stat.net.common.Models
         {
             var staticMeasures = Constants.Measures["static"];
             return staticMeasures.ToDictionary(measure => measure, measure => GetValuesFromServer(serverInformation, measure).Select(a => a.Value).ToArray());
-        }
-
-        /// <summary>The get stat.</summary>
-        /// <param name="sender">The sender.</param>
-        private void GetStatistic(object sender)
-        {
-            // Get Stats
-            var serverInformation = this.client.Info().ToList();
-            var stat = this.ProcessInfo(serverInformation, this.previousServerInformation);
-            this.stats.Enqueue(stat);
-            if (this.stats.Count > Constants.HistoryLength)
-            {
-                this.stats.Dequeue();
-            }
-
-            this.output.Write(stat);
-            this.previousServerInformation = serverInformation;
         }
 
         /// <summary>The get values from server.</summary>
@@ -355,6 +231,140 @@ namespace redis_stat.net.common.Models
             return list;
         }
 
+        /// <summary>The get stat.</summary>
+        /// <param name="sender">The sender.</param>
+        private void GetStatistic(object sender)
+        {
+            // Get Stats
+            var serverInformation = this.client.Info().ToList();
+            var stat = this.ProcessInfo(serverInformation, this.previousServerInfo);
+
+            if (serverInformation.Any(a => a.Error != null))
+            {
+                stat.Error = serverInformation.Select(a => a.Error).Cast<object>().ToArray();
+            }
+
+            this.stats.Enqueue(stat);
+            if (this.stats.Count > Constants.HistoryLength)
+            {
+                this.stats.Dequeue();
+            }
+
+            this.output.Write(stat);
+            this.previousServerInfo = serverInformation;
+        }
+
+
+        /// <summary>The get dynamic properties.</summary>
+        /// <param name="serverInformation">The server information.</param>
+        /// <param name="previousInformation">The previous server information.</param>
+        /// <returns>The <see cref="T:Dictionary{String, Dictionary{String, object[]}}"/>.</returns>
+        private Dictionary<string, Dictionary<string, object[]>> GetDynamicProperties(IEnumerable<RedisServer> serverInformation, IEnumerable<RedisServer> previousInformation)
+        {
+            var dynamicFeatures = Constants.Measures[this.redisStatsOptions.Verbose ? "verbose" : "default"];
+            var t = new Dictionary<string, Dictionary<string, object[]>>();
+            foreach (var key in dynamicFeatures)
+            {
+                var c = this.redisStatsOptions.Hosts.ToDictionary(host => host, host => this.GetFormattedValues(key, host, serverInformation, previousInformation));
+                c.Add("sum", key == "at" ? c.FirstOrDefault().Value : this.HumanizeNumber(c.Sum(a => Convert.ToInt64(a.Value[1])).ToString(CultureInfo.InvariantCulture)));
+                t.Add(key, c);
+            }
+
+            return t;
+        }
+
+        /// <summary>The humanize number.</summary>
+        /// <param name="value">The value.</param>
+        /// <param name="byteRepresentation">The byte representation.</param>
+        /// <returns>The <see cref="object[]"/>.</returns>
+        private object[] HumanizeNumber(string value, bool byteRepresentation = false)
+        {
+            try
+            {
+                var converted = Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                if (!string.IsNullOrEmpty(this.redisStatsOptions.Csv))
+                {
+                    return new object[] { value, converted };
+                }
+
+                var result = converted.ToReadableSIUnit();
+                return new object[] { byteRepresentation ? result + "B" : result, converted };
+            }
+            catch (Exception)
+            {
+                return new object[] { "-", 0 };
+            }
+        }
+
+        /// <summary>The get formatted values.</summary>
+        /// <param name="key">The key.</param>
+        /// <param name="host">The host.</param>
+        /// <param name="serverInformation">The server information.</param>
+        /// <param name="previousServerInformation">The previous server information.</param>
+        /// <returns>The <see cref="object[]"/>.</returns>
+        private object[] GetFormattedValues(string key, string host, IEnumerable<RedisServer> serverInformation, IEnumerable<RedisServer> previousServerInformation)
+        {
+            object[] result;
+            string value;
+            double hits, misses;
+
+            var info = serverInformation as IList<RedisServer> ?? serverInformation.ToList();
+            var prevInfo = previousServerInformation != null ? previousServerInformation as IList<RedisServer> ?? previousServerInformation.ToList() : null;
+
+            switch (key)
+            {
+                case "at":
+                    var datetime = DateTime.Now;
+                    var time = datetime.ToString("HH:mm:ss", CultureInfo.CurrentCulture);
+                    var dateTime = datetime.ToString("yyyy-MM-dd HH:mm:ss zzzz", CultureInfo.CurrentCulture);
+                    object[] formated = { time, dateTime };
+                    result = formated;
+                    break;
+                case "used_cpu_user":
+                case "used_cpu_sys":
+                    value = Convert.ToInt64(Math.Round(Subtract(info, prevInfo, host, key) * 100)).ToString(CultureInfo.CurrentCulture);
+                    result = this.HumanizeNumber(value);
+                    break;
+                case "keys":
+                    var matches = SearchValueFromServer(info, host, "^db[0-9]+$");
+                    value = matches.Sum(a => Convert.ToInt64(a.Split(",".ToCharArray())[0].Split("=".ToCharArray())[1], CultureInfo.InvariantCulture)).ToString(CultureInfo.InvariantCulture);
+                    result = this.HumanizeNumber(value);
+                    break;
+                case "evicted_keys_per_second":
+                case "expired_keys_per_second":
+                case "keyspace_hits_per_second":
+                case "keyspace_misses_per_second":
+                case "total_commands_processed_per_second":
+                    value = Subtract(info, prevInfo, host, key.Replace("_per_second", string.Empty)).ToString(CultureInfo.InvariantCulture);
+                    result = this.HumanizeNumber(value);
+                    break;
+                case "used_memory":
+                case "used_memory_rss":
+                case "aof_current_size":
+                case "aof_base_size":
+                    value = GetValueFromServer(info, host, key);
+                    result = this.HumanizeNumber(value, true);
+                    break;
+                case "keyspace_hit_ratio":
+                    hits = Convert.ToInt64(GetValueFromServer(info, host, "keyspace_hits"), CultureInfo.InvariantCulture);
+                    misses = Convert.ToInt64(GetValueFromServer(info, host, "keyspace_misses"), CultureInfo.InvariantCulture);
+                    value = Ratio(hits, misses).ToString(CultureInfo.CurrentCulture);
+                    result = this.HumanizeNumber(value);
+                    break;
+                case "keyspace_hit_ratio_per_second":
+                    hits = Subtract(info, prevInfo, host, "keyspace_hits");
+                    misses = Subtract(info, prevInfo, host, "keyspace_misses");
+                    result = this.HumanizeNumber(Ratio(hits, misses).ToString(CultureInfo.InvariantCulture));
+                    break;
+                default:
+                    value = GetValueFromServer(info, host, key);
+                    result = Constants.Types[key] == typeof(string) ? new object[] { value, value } : HumanizeNumber(value);
+                    break;
+            }
+
+            return result;
+        }
+
         /// <summary>The process info.</summary>
         /// <param name="serverInformation">The server information.</param>
         /// <param name="previousInformation">The information.</param>
@@ -367,11 +377,6 @@ namespace redis_stat.net.common.Models
             result.DateTimeRequestedAt = (long)epoch;
             result.StaticProperties = GetStaticProperties(info);
             result.DynamicProperties = this.GetDynamicProperties(info, previousInformation);
-            if (info.Any(a => a.Information == null))
-            {
-                result.Error = info.Where(a => a.Information == null).Select(a => "Can't connect to: " + a.ToString()).Cast<object>().ToArray();
-            }
-
             return result;
         }
 

@@ -54,6 +54,7 @@ namespace redis_stat.net.common.Models
                                                                                             { "aof_current_size", "aofcs" },
                                                                                             { "aof_base_size", "aofbs" },
                                                                                             { "rdb_changes_since_last_save", "chsv" },
+                                                                                            { "changes_since_last_save", "chsv" },
                                                                                             { "pubsub_channels", "psch" },
                                                                                             { "pubsub_patterns", "psp" }
                                                                                         };
@@ -85,6 +86,7 @@ namespace redis_stat.net.common.Models
                                                                                             { "aof_current_size", "{0,5}" },
                                                                                             { "aof_base_size", "{0,5}" },
                                                                                             { "rdb_changes_since_last_save", "{0,5}" },
+                                                                                            { "changes_since_last_save", "{0,5}" },
                                                                                             { "pubsub_channels", "{0,5}" },
                                                                                             { "pubsub_patterns", "{0,5}" }
                                                                                         };
@@ -95,6 +97,7 @@ namespace redis_stat.net.common.Models
                                                                                             { "at", new[] { "bold" } },
                                                                                             { "used_cpu_user", new[] { "yellow", "bold" } },
                                                                                             { "used_cpu_sys", new[] { "yellow" } },
+                                                                                            { "changes_since_last_save", new[] { "green", "bold" } },
                                                                                             { "connected_clients", new[] { "cyan", "bold" } },
                                                                                             { "blocked_clients", new[] { "cyan", "bold" } },
                                                                                             { "used_memory", new[] { "green" } },

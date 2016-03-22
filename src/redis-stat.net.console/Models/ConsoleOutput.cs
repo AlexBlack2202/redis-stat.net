@@ -56,6 +56,12 @@ namespace redis_stat.net.console.Models
                 this.OutputHeaders();
                 this.staticInfoReported = true;
             }
+
+            if (this.OutputTermErrors(stats.Error))
+            {
+                return;
+            }
+            
             this.OutputDynamicInfo(stats);
         }
 
@@ -145,24 +151,13 @@ namespace redis_stat.net.console.Models
             Console.WriteLine(sb.ToString());
         }
 
-        /// <summary>The output term.</summary>
-        /// <param name="stat">The stat.</param>
-        /// <param name="errorMessages">The error messages.</param>
-        private void OutputTerm(Stats stat, IEnumerable<string> errorMessages)
-        {
-            if (this.OutputTermErrors(errorMessages))
-            {
-                return;
-            }
-        }
-
         /// <summary>The output term errors.</summary>
         /// <param name="errorMessages">The error messages.</param>
         /// <returns>The <see cref="bool"/>.</returns>
-        private bool OutputTermErrors(IEnumerable<string> errorMessages)
+        private bool OutputTermErrors(IEnumerable<object> errorMessages)
         {
             this.termErrorReported = this.termErrorReported || this.termErrorReported == false;
-            if (!errorMessages.Any())
+            if (errorMessages == null || !errorMessages.Any())
             {
                 this.termErrorReported = false;
             }
@@ -173,7 +168,7 @@ namespace redis_stat.net.console.Models
                     Console.Write(string.Empty);
                 }
 
-                Console.Write(string.Join("/", errorMessages));
+                Console.WriteLine(string.Join("/", errorMessages));
                 this.termErrorReported = true;
             }
 

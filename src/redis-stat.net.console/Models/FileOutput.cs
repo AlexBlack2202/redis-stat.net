@@ -74,8 +74,7 @@ namespace redis_stat.net.common.IO
         private void OutputHeaders()
         {
             var measures = Constants.Measures[this.options.Verbose ? "verbose" : "default"];
-            var list = measures.Select(measure => Constants.Labels[measure]);
-            this.fileManager.WriteFile(this.options.Csv, string.Join(",", list));
+            this.fileManager.WriteFile(this.options.Csv, string.Join(",", measures));
         }
 
         #endregion
