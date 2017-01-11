@@ -6,8 +6,6 @@ It has been ported from [redis-stat](https://github.com/junegunn/redis-stat) a n
 
 This utility is still a work in progress, I will continue updating it until it gets to a point that it works as close as the original application. If you find issues, file them in the issues section so that I can take a look at them.
 
-This version only contains the dashboard page, there is no console application loging.
-
 ## Technologies used
 
 - .NET Framework 4.5
