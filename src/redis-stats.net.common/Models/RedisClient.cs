@@ -44,10 +44,10 @@ namespace redis_stat.net.common.Models
         public IEnumerable<RedisServer> Info()
         {
             var redisServers = new List<RedisServer>();
-            var endpoints = this.client.GetEndPoints(true).Cast<DnsEndPoint>();
+            var endpoints = this.client.GetEndPoints(true).Cast<IPEndPoint>();
             foreach (var endpoint in endpoints)
             {
-                var redisServer = new RedisServer { Host = endpoint.Host, Port = endpoint.Port.ToString(CultureInfo.InvariantCulture) };
+                var redisServer = new RedisServer { Host = endpoint.Address.ToString(), Port = endpoint.Port.ToString(CultureInfo.InvariantCulture) };
                 var server = this.client.GetServer(endpoint);
                 try
                 {
@@ -60,7 +60,7 @@ namespace redis_stat.net.common.Models
                     redisServer.Error = string.Format(
                         CultureInfo.InvariantCulture,
                         "Redis server {0}:{1} connection failed, with following error: {2}",
-                        endpoint.Host,
+                        endpoint.Address.ToString(),
                         endpoint.Port,
                         ex.FailureType);
                 }
